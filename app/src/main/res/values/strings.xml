@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">My App</string>
+    <string name="hint_enter_address">Enter Address</string>
+    <string name="btn_show_location">Show Location</string>
+    <string name="back_button_description">Navigate back</string>
+    <string name="app_settings_title">App Settings</string>
+    <string name="profile_picture_description">User profile picture</string>
+    <string name="search_hint">Search here......</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile_description">Icon for editing user profile</string>
+    <string name="security">Security</string>
+    <string name="security_description">Icon for security settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_description">Icon for notification settings</string>
+    <string name="language">Language</string>
+    <string name="language_description">Icon for language settings</string>
+    <string name="font_size">Font size</string>
+    <string name="font_size_description">Icon for font size settings</string>
+    <string name="help_support">Help and Support</string>
+    <string name="help_support_description">Icon for help and support</string>
+    <string name="logout">logout</string>
+</resources>

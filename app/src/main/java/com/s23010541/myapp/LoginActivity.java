@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.EditText; // Still needed for findViewById, but logic will ignore input
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,48 +16,32 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private TextView tvForgetPassword;
     private TextView tvSignUp;
-    private DatabaseHelper databaseHelper; // Declare an instance of your DatabaseHelper
+    // private DatabaseHelper databaseHelper; // No longer strictly needed if bypassing login logic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize views
+        // Initialize views (still good practice, even if not directly used for validation)
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvForgetPassword = findViewById(R.id.tvForgetPassword);
         tvSignUp = findViewById(R.id.tvSignUp);
 
-        // Initialize DatabaseHelper
-        databaseHelper = new DatabaseHelper(this); // Initialize your DatabaseHelper here
+        // databaseHelper = new DatabaseHelper(this); // You can comment this out or remove it if database operations are not needed at all here
 
         // Set OnClickListener for Login button
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
-
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter both email and password.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Authenticate user against the database
-                    // This assumes 'checkUser' verifies existing data, not inserts new data
-                    boolean isValidUser = databaseHelper.checkUser(email, password);
-
-                    if (isValidUser) {
-                        Toast.makeText(LoginActivity.this, "Login successful! Data checked from dataset.", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class); // Assuming you have a DashboardActivity
-                        startActivity(intent);
-                        finish();
-
-
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Invalid email or password.", Toast.LENGTH_SHORT).show();
-                    }
-                }
+            public void onClick(View v) {                // --- MODIFICATION START ---
+                // Directly navigate to DashboardActivity, ignoring email and password fields.
+                Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                finish(); // Finish LoginActivity so the user cannot go back to it
+                // --- MODIFICATION END ---
             }
         });
 

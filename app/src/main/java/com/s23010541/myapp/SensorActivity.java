@@ -24,8 +24,6 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private SensorManager sensorManager;
     private Sensor temperatureSensor;
 
-    // Removed: private static final float TEMPERATURE_THRESHOLD = 90.0f; // Threshold no longer needed if alert is removed
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,13 +88,6 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             // Update the TextView with the current temperature
             sensorStatusTextView.setText(String.format(Locale.getDefault(), "Temperature: %.1f°C", temperature));
 
-            // Removed all alert-related logic as requested
-            // if (temperature > TEMPERATURE_THRESHOLD) {
-            //     alertMessageTextView.setText("Temperature exceeded! Playing alert...");
-            //     alertMessageTextView.setVisibility(View.VISIBLE);
-            // } else {
-            //     alertMessageTextView.setVisibility(View.GONE);
-            // }
         }
     }
 

@@ -16,10 +16,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.YourApp">
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FinancialEducationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LanguageAdapter"
+            android:exported="true" />
+        <activity
+            android:name=".LanguageFontActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ManageAccountActivity"
+            android:exported="true" />
+        <activity
+            android:name=".BudgetPlannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".IconAdapter2"
+            android:exported="true" />
+        <activity
+            android:name=".IncomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CalculatorActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ExpensesActivity"
+            android:exported="true" />
         <activity
             android:name=".SecurityActivity"
-            android:exported="false" />
-        <!-- Profile Activity (updated exported to true) -->
+            android:exported="true" />
         <activity
             android:name=".YourProfileActivity"
             android:exported="true" />
@@ -41,7 +77,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />

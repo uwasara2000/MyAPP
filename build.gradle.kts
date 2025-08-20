@@ -1,4 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// In build.gradle.kts (Project: MyApp)
+
 plugins {
     alias(libs.plugins.android.application) apply false
 }
+

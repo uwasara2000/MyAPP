@@ -2,56 +2,68 @@ package com.s23010541.myapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SecurityActivity extends AppCompatActivity {
 
     private ImageButton backButton;
-    private Switch locationSwitch; // Assuming you have a location switch in your security settings
+    private Switch locationSwitch;
+    private LinearLayout deleteAccountSection, changePasswordLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_security); // CORRECTED: Use activity_security.xml
+        setContentView(R.layout.activity_security);
 
         // Initialize views
-        backButton = findViewById(R.id.backButton); // Assuming a new ID for back button in security layout
-        locationSwitch = findViewById(R.id.locationSwitch); // Assuming a Switch with this ID in activity_security.xml
+        backButton = findViewById(R.id.backButton);
+        locationSwitch = findViewById(R.id.locationSwitch);
+        deleteAccountSection = findViewById(R.id.deleteLayout);
+        changePasswordLayout = findViewById(R.id.changepasswordLayout);
 
-        // Set OnClickListener for the back button
+        // Back button → go back to Settings
         backButton.setOnClickListener(v -> {
-            // Navigate back to SettingsActivity
             Intent intent = new Intent(SecurityActivity.this, SettingsActivity.class);
             startActivity(intent);
-            finish(); // Finish SecurityActivity to remove it from the stack
-            // Alternatively, just finish(): finish();
+            finish();
         });
 
-        // Set listener for the location switch
+        // Delete account → open ManageAccountActivity
+        deleteAccountSection.setOnClickListener(v -> showDeleteConfirmationDialog());
+
+        // Location switch listener
         locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Toast.makeText(SecurityActivity.this, "Location Tracking ON", Toast.LENGTH_SHORT).show();
-                // TODO: Implement logic to enable location tracking
             } else {
                 Toast.makeText(SecurityActivity.this, "Location Tracking OFF", Toast.LENGTH_SHORT).show();
-                // TODO: Implement logic to disable location tracking
             }
         });
 
-        // Add listeners for any other specific security settings you add to activity_security.xml
-        // Example: Change Password button
-        // findViewById(R.id.changePasswordButton).setOnClickListener(v -> {
-        //     Toast.makeText(SecurityActivity.this, "Change Password clicked", Toast.LENGTH_SHORT).show();
-        //     // TODO: Implement navigation to a change password screen
-        // });
+        // Change password → open ChangePasswordActivity
+        changePasswordLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(SecurityActivity.this, ChangePasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    // Confirmation dialog for delete account
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Account")
+                .setMessage("Are you sure you want to delete your account?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Intent intent = new Intent(SecurityActivity.this, ManageAccountActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

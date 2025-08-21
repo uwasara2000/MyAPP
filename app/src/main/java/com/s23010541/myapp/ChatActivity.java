@@ -31,7 +31,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton backButton;
 
     private final OkHttpClient client = new OkHttpClient();
-    private static final String API_KEY = "YOUR_API_KEY_HERE"; // ⚠️ Replace with fresh key
+    private static final String API_KEY = "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"; // ⚠️ Replace with fresh key
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 

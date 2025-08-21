@@ -2,6 +2,7 @@ package com.s23010541.myapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,11 +28,12 @@ public class ChatActivity extends AppCompatActivity {
     private EditText userInput;
     private Button sendButton;
     private TextView chatOutput;
-    private ImageButton backButton; // ✅ Add reference
+    private ImageButton backButton;
 
     private final OkHttpClient client = new OkHttpClient();
-    private static final String API_KEY = "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"; // ⚠️ Replace with your real key
+    private static final String API_KEY = "YOUR_API_KEY_HERE"; // ⚠️ Replace with fresh key
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +45,18 @@ public class ChatActivity extends AppCompatActivity {
         chatOutput = findViewById(R.id.chatOutput);
         backButton = findViewById(R.id.backButton);
 
+        // Back button → go to Dashboard
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ChatActivity.this, DashboardActivity.class);
             startActivity(intent);
-            finish(); // closes ChatActivity so the user doesn’t come back here on system back
+            finish();
         });
 
-
+        // Send button
         sendButton.setOnClickListener(v -> {
             String message = userInput.getText().toString().trim();
             if (!message.isEmpty()) {
-                chatOutput.append("\nYou: " + message);
+                chatOutput.append("\n\nYou: " + message);
                 sendMessageToChatGPT(message);
                 userInput.setText("");
             }
@@ -61,8 +64,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessageToChatGPT(String message) {
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
         try {
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("model", "gpt-3.5-turbo");
@@ -86,33 +87,47 @@ public class ChatActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    runOnUiThread(() -> chatOutput.append("\nError: " + e.getMessage()));
+                    runOnUiThread(() ->
+                            chatOutput.append("\n\n❌ Network error: " + e.getMessage()));
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
-                        runOnUiThread(() -> chatOutput.append("\nError: " + response.message()));
-                    } else {
-                        try {
-                            String resStr = response.body().string();
-                            JSONObject json = new JSONObject(resStr);
-                            String reply = json
-                                    .getJSONArray("choices")
-                                    .getJSONObject(0)
-                                    .getJSONObject("message")
-                                    .getString("content");
+                        String errMsg = "HTTP " + response.code() + ": " + response.message();
+                        runOnUiThread(() ->
+                                chatOutput.append("\n\n❌ Error: " + errMsg));
+                        return;
+                    }
 
-                            runOnUiThread(() -> chatOutput.append("\nChatGPT: " + reply.trim()));
-                        } catch (Exception e) {
-                            runOnUiThread(() -> chatOutput.append("\nParsing error: " + e.getMessage()));
+                    try {
+                        String resStr = response.body().string();
+                        JSONObject json = new JSONObject(resStr);
+                        JSONArray choices = json.getJSONArray("choices");
+
+                        if (choices.length() > 0) {
+                            JSONObject messageObj = choices
+                                    .getJSONObject(0)
+                                    .getJSONObject("message");
+
+                            String reply = messageObj.getString("content");
+
+                            runOnUiThread(() ->
+                                    chatOutput.append("\n\nChatGPT: " + reply.trim()));
+                        } else {
+                            runOnUiThread(() ->
+                                    chatOutput.append("\n\n⚠️ No reply from ChatGPT"));
                         }
+                    } catch (Exception e) {
+                        Log.e("ChatActivity", "Parsing error", e);
+                        runOnUiThread(() ->
+                                chatOutput.append("\n\n⚠️ Parsing error: " + e.getMessage()));
                     }
                 }
             });
 
         } catch (Exception e) {
-            chatOutput.append("\nError: " + e.getMessage());
+            chatOutput.append("\n\n⚠️ Error: " + e.getMessage());
         }
     }
 }

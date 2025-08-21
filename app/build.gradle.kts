@@ -44,6 +44,7 @@ dependencies {
 
     implementation ("com.squareup.okhttp3:okhttp:4.10.0")
     implementation ("org.json:json:20220320")
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

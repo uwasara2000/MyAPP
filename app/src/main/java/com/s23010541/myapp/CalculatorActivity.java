@@ -14,7 +14,6 @@ public class CalculatorActivity extends AppCompatActivity {
     private double firstOperand = 0;
     private boolean isNewCalculation = true;
 
-    // Define a key for the Intent extra
     public static final String ORIGIN_ACTIVITY_KEY = "ORIGIN_ACTIVITY";
 
     @Override
@@ -25,26 +24,24 @@ public class CalculatorActivity extends AppCompatActivity {
         displayTextView = findViewById(R.id.displayTextView);
         ImageButton backButton = findViewById(R.id.backButton);
 
-        // Get the origin activity from the Intent
+        // Get origin activity
         String originActivity = getIntent().getStringExtra(ORIGIN_ACTIVITY_KEY);
 
-        // Set the back button listener
+        // Back button logic
         backButton.setOnClickListener(v -> {
             Intent intent;
-            // Check the origin and create the appropriate Intent
             if ("Expenses".equals(originActivity)) {
                 intent = new Intent(CalculatorActivity.this, ExpensesActivity.class);
             } else if ("Income".equals(originActivity)) {
                 intent = new Intent(CalculatorActivity.this, IncomeActivity.class);
             } else {
-                // Fallback to a default activity if the origin is unknown
                 intent = new Intent(CalculatorActivity.this, DashboardActivity.class);
             }
             startActivity(intent);
             finish();
         });
 
-        // Set click listeners for number buttons
+        // Number buttons
         findViewById(R.id.button0).setOnClickListener(v -> onNumberClick("0"));
         findViewById(R.id.button1).setOnClickListener(v -> onNumberClick("1"));
         findViewById(R.id.button2).setOnClickListener(v -> onNumberClick("2"));
@@ -57,22 +54,24 @@ public class CalculatorActivity extends AppCompatActivity {
         findViewById(R.id.button9).setOnClickListener(v -> onNumberClick("9"));
         findViewById(R.id.buttonDot).setOnClickListener(v -> onNumberClick("."));
 
-        // Set click listeners for operator buttons
+        // Operators
         findViewById(R.id.buttonAdd).setOnClickListener(v -> onOperatorClick("+"));
         findViewById(R.id.buttonSubtract).setOnClickListener(v -> onOperatorClick("-"));
         findViewById(R.id.buttonMultiply).setOnClickListener(v -> onOperatorClick("*"));
         findViewById(R.id.buttonDivide).setOnClickListener(v -> onOperatorClick("/"));
 
-        // Set click listeners for clear and equals buttons
+        // Clear & Equals
         findViewById(R.id.buttonClear).setOnClickListener(v -> onClearClick());
         findViewById(R.id.buttonEquals).setOnClickListener(v -> onEqualsClick());
 
-        // Updated code for the "Go" button
+        // Go button → pass result to AddActivity
         findViewById(R.id.buttonGo).setOnClickListener(v -> {
+            String result = displayTextView.getText().toString();
             Intent intent = new Intent(CalculatorActivity.this, AddActivity.class);
+            intent.putExtra("CALCULATED_AMOUNT", result);
+            intent.putExtra("ORIGIN_ACTIVITY", originActivity);
             startActivity(intent);
-            // Optionally, call finish() if you don't want the user to go back to the calculator
-            // finish();
+            finish();
         });
     }
 
